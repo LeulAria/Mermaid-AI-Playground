@@ -7,6 +7,9 @@
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
 			"outputs": ["dist/**"]
 		},
+		"@mermaid/db#build": {
+			"dependsOn": ["@mermaid/db#db:generate"]
+		},
 		"lint": {
 			"dependsOn": ["^lint"]
 		},
