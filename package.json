@@ -24,6 +24,8 @@
   },
   "scripts": {
     "install:fix": "bun install --ignore-scripts && bun run db:generate",
+    "postinstall": "bun run db:generate && bun run db:migrate",
+    "vercel-build": "bun run db:generate && bun run db:migrate",
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
