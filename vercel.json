@@ -1,6 +1,6 @@
 {
   "installCommand": "bun install --ignore-scripts",
-  "buildCommand": "bun run db:migrate && bun run build",
+  "buildCommand": "cd /vercel/path0 && bun run db:migrate && bun run build",
   "framework": null,
   "outputDirectory": "apps/web/dist"
 }
