@@ -1,0 +1,25 @@
+/* Mermaid Diagram Styling - Force white text ONLY in p tags inside foreignObject */
+
+/* Target ALL p tags inside foreignObject - most aggressive selector */
+foreignObject p,
+foreignObject div p,
+foreignObject span p,
+foreignObject .nodeLabel p,
+svg foreignObject p,
+svg[class*="statediagram"] foreignObject p,
+svg.statediagram foreignObject p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 300 !important;
+  font-size: 0.675rem !important;
+  text-align: center !important;
+}
+
+/* This rule targets the standard Mermaid error SVG output and hides the elements */
+/* This is the most reliable way to prevent the bomb icon and generic error text from showing. */
+.mermaid-container svg .error-icon,
+.mermaid-container svg .error-text,
+.mermaid-container svg [class*="error-icon"],
+.mermaid-container svg [class*="error-text"] {
+    display: none !important;
+}

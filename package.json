@@ -35,7 +35,9 @@
   },
   "dependencies": {
     "dotenv": "^17.2.2",
-    "zod": "^4.1.11"
+    "immer": "^10.2.0",
+    "zod": "^4.1.11",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "turbo": "^2.5.4",
