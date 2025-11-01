@@ -23,6 +23,7 @@
     }
   },
   "scripts": {
+    "install:fix": "bun install --ignore-scripts && bun run db:generate",
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
