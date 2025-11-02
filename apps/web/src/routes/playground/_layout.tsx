@@ -388,7 +388,7 @@ Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
           >
             <Box
               component="img"
-              src="public/bmc-button.png"
+              src="/bmc-button.png"
               alt="Buy Me A Coffee"
               sx={{
                 borderRadius: "25px",
