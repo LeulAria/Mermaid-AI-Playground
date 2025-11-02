@@ -388,13 +388,14 @@ Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
           >
             <Box
               component="img"
-              src="public/buyme-cofee.svg"
+              src="public/bmc-button.png"
               alt="Buy Me A Coffee"
               sx={{
                 borderRadius: "25px",
                 height: "38px",
                 width: "172px",
                 display: "block",
+                scale: "0.9",
               }}
             />
           </Box>
