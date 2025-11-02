@@ -372,11 +372,11 @@ export const AIChat: React.FC<AIChatProps> = ({ onClose, initialMessage }) => {
                     <Box
                       key={index}
                       sx={{
-                        fontSize: "14px",
+                        fontSize: "12px",
                         color: "#E8EAED",
                         whiteSpace: "pre-wrap",
                         fontFamily: '"Google Sans", "Roboto", "Arial", sans-serif',
-                        lineHeight: "20px",
+                        lineHeight: "18px",
                         letterSpacing: "0.01em",
                         fontWeight: 400,
                       }}
@@ -390,6 +390,7 @@ export const AIChat: React.FC<AIChatProps> = ({ onClose, initialMessage }) => {
                               component="pre"
                               sx={{
                                 margin: 0,
+                                fontSize: "0.7rem",
                                 fontFamily: "inherit",
                               }}
                             >
@@ -421,7 +422,7 @@ export const AIChat: React.FC<AIChatProps> = ({ onClose, initialMessage }) => {
           >
             <Box
               sx={{
-                fontSize: "14px",
+                fontSize: "0.75rem",
                 color: "#9AA0A6",
                 fontFamily: '"Google Sans", "Roboto", "Arial", sans-serif',
                 fontWeight: 400,

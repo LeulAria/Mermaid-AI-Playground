@@ -685,6 +685,72 @@ export const Mermaid: React.FC<MermaidProps> = ({
             }
           }, 10);
 
+          // Center the diagram for previewMode
+          if (previewMode) {
+            setTimeout(() => {
+              const svgElement = containerRef.current?.querySelector(
+                "svg"
+              ) as SVGSVGElement;
+
+              if (svgElement && containerRef.current) {
+                try {
+                  const svgBBox = svgElement.getBBox();
+                  const containerRect =
+                    containerRef.current.getBoundingClientRect();
+
+                  if (
+                    containerRect &&
+                    containerRect.width > 0 &&
+                    containerRect.height > 0 &&
+                    svgBBox.width > 0 &&
+                    svgBBox.height > 0
+                  ) {
+                    // Calculate the scale to fit the diagram in the container with padding
+                    const padding = 8;
+                    const scaleX =
+                      (containerRect.width - padding * 2) / svgBBox.width;
+                    const scaleY =
+                      (containerRect.height - padding * 2) / svgBBox.height;
+                    let scale = Math.min(scaleX, scaleY);
+
+                    // Zoom in more aggressively for showcase (200% of fit scale)
+                    scale = scale * 2.0;
+
+                    // Ensure scale is reasonable
+                    if (!isFinite(scale) || scale <= 0) {
+                      scale = 1;
+                    }
+
+                    // Get the center of the SVG content bounding box (in SVG coordinates)
+                    const svgContentCenterX = svgBBox.x + svgBBox.width / 2;
+                    const svgContentCenterY = svgBBox.y + svgBBox.height / 2;
+
+                    // Get container center (in container/client coordinates)
+                    const containerCenterX = containerRect.width / 2;
+                    const containerCenterY = containerRect.height / 2;
+
+                    // Calculate the final transform to center the entire diagram content
+                    // Position the center of the scaled diagram at the center of the container
+                    const finalX = containerCenterX - svgContentCenterX * scale;
+                    const finalY = containerCenterY - svgContentCenterY * scale;
+
+                    // Ensure values are finite
+                    if (isFinite(finalX) && isFinite(finalY) && isFinite(scale)) {
+                      svgElement.style.transformOrigin = "0 0";
+                      svgElement.style.transform = `translate(${finalX}px, ${finalY}px) scale(${scale})`;
+                    }
+                  }
+                } catch (e) {
+                  // If centering fails, just ensure SVG is visible
+                  if (svgElement) {
+                    svgElement.style.visibility = "visible";
+                    svgElement.style.opacity = "1";
+                  }
+                }
+              }
+            }, 200);
+          }
+
           // Initialize zoom/pan after a short delay to ensure SVG is rendered
           // Skip panzoom initialization if in preview mode
           if (!previewMode) {
@@ -765,58 +831,8 @@ export const Mermaid: React.FC<MermaidProps> = ({
                           setTransform({ x: finalX, y: finalY, scale });
                         } else {
                           // Fallback: Apply transform manually to SVG and sync with panzoom
-                          // This ensures the diagram is centered regardless of panzoom API
-                          // Panzoom uses transformOrigin 0 0, so we apply the transform directly
                           svgElement.style.transformOrigin = "0 0";
                           svgElement.style.transform = `translate(${finalX}px, ${finalY}px) scale(${scale})`;
-                          
-                          // Try to sync panzoom's internal state so it knows about our transform
-                          try {
-                            // First, get the current transform (might be default 0,0,1)
-                            const currentTransform = panzoomInstanceRef.current.getTransform();
-                            
-                            // Update panzoom's internal state to match our manual transform
-                            // Panzoom stores transform as {x, y, scale}
-                            // We need to tell panzoom what we've set manually
-                            const panzoomTransform = {
-                              x: finalX,
-                              y: finalY,
-                              scale: scale
-                            };
-                            
-                            // Try to use panzoom's internal update method if available
-                            const updateTransform = (panzoomInstanceRef.current as any)?.updateTransform;
-                            if (updateTransform && typeof updateTransform === "function") {
-                              updateTransform(panzoomTransform);
-                            } else {
-                              // Otherwise, try to move and zoom separately
-                              panzoomInstanceRef.current.moveTo(finalX, finalY);
-                              
-                              // Try to set zoom level if panzoom supports it
-                              const zoomAbs = (panzoomInstanceRef.current as any)?.zoomAbs;
-                              const zoomTo = (panzoomInstanceRef.current as any)?.zoomTo;
-                              
-                              if (zoomAbs && typeof zoomAbs === "function") {
-                                zoomAbs(scale);
-                              } else if (zoomTo && typeof zoomTo === "function") {
-                                zoomTo(scale);
-                              } else {
-                                // If we can't set zoom directly, try smoothZoom at container center
-                                const currentScale = currentTransform.scale || 1;
-                                if (currentScale !== scale) {
-                                  const zoomDiff = scale / currentScale;
-                                  const smoothZoom = (panzoomInstanceRef.current as any)?.smoothZoom;
-                                  if (smoothZoom && typeof smoothZoom === "function") {
-                                    smoothZoom(containerCenterX, containerCenterY, zoomDiff);
-                                  }
-                                }
-                              }
-                            }
-                          } catch (syncError) {
-                            // If syncing fails, at least the manual transform is applied
-                            // The diagram will still be centered visually
-                            console.warn("Could not sync panzoom state, but transform is applied");
-                          }
                         }
                       }
                     } catch (e) {

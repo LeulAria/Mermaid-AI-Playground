@@ -4,7 +4,6 @@ B-->|Yes|C[Action]
 B-->|No|D[Action]
 C-->E[End]
 D-->E
-
 flowchart TD
 Start([Start])-->Input[Input Data]
 Input-->Validate{Valid?}
@@ -13,19 +12,12 @@ Validate-->|No|Error[Show Error]
 Process-->Save[(Save to Database)]
 Save-->End([End])
 Error-->End
-
 flowchart LR
 A[Start]--Some text-->B(Continue)
 B-->C{Evaluate}
 C--One-->D[Option 1]
 C--Two-->E[Option 2]
 C--Three-->F[Option 3]
-
-graph LR
-A-->B
-B-->C
-C-->D
-
 flowchart TD
 A[Node A]-->B[Node B]
 B-->C[Node C]
@@ -36,14 +28,12 @@ subgraph S2[Subgraph 2]
 E[Node E]-->F[Node F]
 end
 D-->E
-
 flowchart TD
 A[Node A]-->|Label|B[Node B]
 A-.->|Dotted|C[Node C]
 A==>|Thick|D[Node D]
 A--x|Cross|E[Node E]
 A---|No label|F[Node F]
-
 flowchart TD
 A((Circle))-->B([Rounded])
 B-->C{Diamond}
@@ -51,43 +41,24 @@ C-->D[[Subroutine]]
 D-->E[(Cylinder)]
 E-->F>Parallelogram]
 F-->G{{Hexagon}}
-
 flowchart LR
 A[Node]:::style1
 B[Node]:::style2
 A-->B
 classDef style1 fill:#f9f,stroke:#333,stroke-width:2px
 classDef style2 fill:#bbf,stroke:#333,stroke-width:2px
-
 flowchart TD
 A[Start]:::start
 B[End]:::end
 A-->B
 classDef start fill:#90EE90
 classDef end fill:#FFB6C1
-
 flowchart TD
 A[Node A]-->B[Node B]
 A-->C[Node C]
 B-->D[Node D]
 C-->D
 D-->E[Node E]
-
-flowchart LR
-A[Input]-->B{Check}
-B-->|True|C[Process]
-B-->|False|D[Skip]
-C-->E[Output]
-D-->E
-
-flowchart TD
-Start([Start])-->Process[Process]
-Process-->Decision{Decision?}
-Decision-->|Yes|Action1[Action 1]
-Decision-->|No|Action2[Action 2]
-Action1-->End([End])
-Action2-->End
-
 sequenceDiagram
 participant A as Alice
 participant B as Bob
@@ -95,7 +66,6 @@ A->>B: Hello Bob, how are you?
 B-->>A: Great!
 A->>B: Can you help me?
 B->>A: Sure!
-
 sequenceDiagram
 participant User
 participant Client
@@ -107,19 +77,16 @@ Server->>Database: Query user
 Database-->>Server: User data
 Server->>Client: Authentication success/failure
 Client->>User: Show dashboard/error
-
 sequenceDiagram
 A->>B: Message
 A->>+B: Activate
 B-->>A: Response
 A->>-B: Deactivate
-
 sequenceDiagram
 loop Every minute
 A->>B: Ping
 B-->>A: Pong
 end
-
 sequenceDiagram
 alt Success case
 A->>B: Request
@@ -128,20 +95,17 @@ else Failure case
 A->>B: Request
 B-->>A: Error
 end
-
 sequenceDiagram
 par Parallel 1
 A->>B: Request 1
 and Parallel 2
 A->>C: Request 2
 end
-
 sequenceDiagram
 Note over A,B: This is a note
 A->>B: Message
 Note right of B: Right note
 Note left of A: Left note
-
 sequenceDiagram
 activate A
 A->>B: Message
@@ -149,34 +113,21 @@ activate B
 B-->>A: Response
 deactivate B
 deactivate A
-
 sequenceDiagram
 autonumber
 A->>B: First message
 B->>C: Second message
 C-->>A: Third message
-
-sequenceDiagram
-participant P1
-participant P2
-participant P3
-P1->>P2: Request
-P2->>P3: Forward
-P3-->>P2: Response
-P2-->>P1: Reply
-
 stateDiagram-v2
 [*]-->Red
 Red-->Green: Timer expires
 Green-->Yellow: Timer expires
 Yellow-->Red: Timer expires
-
 stateDiagram-v2
 [*]-->State1
 State1-->State2: Event1
 State2-->State3: Event2
 State3-->[*]
-
 stateDiagram-v2
 state "State Name" as State1 {
 [*]-->SubState1
@@ -184,7 +135,6 @@ SubState1-->SubState2
 SubState2-->[*]
 }
 [*]-->State1
-
 stateDiagram-v2
 [*]-->Idle
 Idle-->Active: Start
@@ -193,7 +143,6 @@ Active-->Paused: Pause
 Paused-->Active: Resume
 Paused-->Idle: Stop
 Idle-->[*]
-
 stateDiagram-v2
 [*]-->State1
 State1: entry / action1
@@ -201,17 +150,6 @@ State1: do / action2
 State1: exit / action3
 State1-->State2: Event1
 State2-->[*]
-
-stateDiagram-v2
-state "Complex State" as Complex {
-[*]-->State1
-State1-->State2
-State2-->[*]
-}
-[*]-->Complex
-Complex-->FinalState
-FinalState-->[*]
-
 classDiagram
 class Animal{
 +String name
@@ -223,7 +161,6 @@ class Dog{
 +void bark()
 }
 Animal <|-- Dog
-
 classDiagram
 class Vehicle{
 +String brand
@@ -240,7 +177,6 @@ class Truck{
 }
 Vehicle <|-- Car
 Vehicle <|-- Truck
-
 classDiagram
 class A{
 +method1()
@@ -253,7 +189,6 @@ class B{
 A <|-- B
 A ..> C: uses
 C --> D: contains
-
 classDiagram
 class Interface{
 <<interface>>
@@ -263,7 +198,6 @@ class Implementation{
 +method()
 }
 Interface <|.. Implementation
-
 classDiagram
 class Parent{
 +method()
@@ -274,31 +208,10 @@ class Child{
 Parent <|-- Child
 Parent <|-- Child2
 Parent <|-- Child3
-
-classDiagram
-class A{
-+field1:String
-+field2:Int
-+method1()
-+method2()String
-}
-class B{
-+field3:Boolean
-+method3()
-}
-class C{
-+field4:Double
-}
-A <|-- B
-A <|-- C
-A ..> D: uses
-A --> E: contains
-
 erDiagram
 CUSTOMER ||--o{ ORDER : places
 ORDER ||--|{ LINE-ITEM : contains
 CUSTOMER }|..|{ DELIVERY-ADDRESS : uses
-
 erDiagram
 CUSTOMER {
 string name
@@ -315,7 +228,6 @@ int id PK
 int orderId FK
 int quantity
 }
-
 erDiagram
 ENTITY1 {
 string attr1 PK
@@ -328,12 +240,6 @@ string attr2
 }
 ENTITY1 ||--o{ ENTITY2 : relationship1
 ENTITY1 }o--|| ENTITY3 : relationship2
-
-erDiagram
-A ||--o{ B : has
-B }o--|| C : belongs
-C ||--|{ D : contains
-
 gantt
 dateFormat YYYY-MM-DD
 title Project Schedule
@@ -343,61 +249,11 @@ Prototype:a2,after a1,5d
 section Development
 Coding:b1,2024-01-08,10d
 Testing:b2,after b1,5d
-
-gantt
-dateFormat YYYY-MM-DD
-title Task Schedule
-section Section A
-Task 1:a1,2024-01-01,10d
-Task 2:a2,2024-01-10,5d
-section Section B
-Task 3:b1,2024-01-15,8d
-Task 4:b2,after b1,3d
-
-gantt
-dateFormat YYYY-MM-DD
-title Gantt Chart
-section Section 1
-Task A:a1,2024-01-01,10d
-Task B:a2,after a1,5d
-section Section 2
-Task C:b1,2024-01-15,8d
-
-gantt
-title Title
-dateFormat YYYY-MM-DD
-section S1
-T1:2024-01-01,5d
-T2:after T1,3d
-section S2
-T3:2024-01-10,7d
-
 pie title Market Share
 "Product A":40
 "Product B":30
 "Product C":20
 "Product D":10
-
-pie title Distribution
-"Category 1":25
-"Category 2":35
-"Category 3":15
-"Category 4":25
-
-pie title Chart
-"Item 1":25
-"Item 2":30
-"Item 3":20
-"Item 4":15
-"Item 5":10
-
-pie title Title
-"A":30
-"B":25
-"C":20
-"D":15
-"E":10
-
 gitGraph
 commit
 commit
@@ -411,7 +267,6 @@ merge feature
 checkout main
 merge develop
 commit
-
 gitGraph
 commit id:"Initial"
 commit id:"Add feature"
@@ -421,26 +276,6 @@ commit id:"Feature work"
 checkout main
 merge feature-branch
 commit id:"Release"
-
-gitGraph
-commit id:"Commit 1"
-commit id:"Commit 2"
-branch branch1
-checkout branch1
-commit id:"Commit 3"
-checkout main
-merge branch1
-commit id:"Commit 4"
-
-gitGraph
-commit
-branch b1
-checkout b1
-commit
-checkout main
-merge b1
-commit
-
 journey
 title User Journey
 section Landing
@@ -452,25 +287,6 @@ Checkout:5:User
 Payment:4:User
 section Completion
 Receive confirmation:5:User
-
-journey
-title Customer Journey
-section Discovery
-Search:4:Customer
-Browse:5:Customer
-section Purchase
-Select:5:Customer
-Buy:5:Customer
-
-journey
-title Journey
-section Section 1
-Action 1:5:User
-Action 2:4:User
-section Section 2
-Action 3:3:User
-Action 4:5:User
-
 timeline
 title Project Timeline
 section Phase 1
@@ -479,14 +295,6 @@ section Phase 2
 Development:Testing:Deployment
 section Phase 3
 Maintenance:Updates:Support
-
-timeline
-title Timeline
-section 2024
-Q1:Q2:Q3
-section 2025
-Q1:Q2:Q3
-
 architecture-beta
 group api(cloud)[API]
 service db(database)[Database] in api
@@ -496,16 +304,6 @@ service server(server)[Server] in api
 db:L--R:server
 disk1:T--B:server
 disk2:T--B:db
-
-architecture-beta
-group frontend(browser)[Frontend]
-group backend(server)[Backend]
-service ui(application)[UI] in frontend
-service api(application)[API] in backend
-service db(database)[Database] in backend
-ui:T--B:api
-api:L--R:db
-
 mindmap
 root((Mermaid))
 Types
@@ -517,16 +315,6 @@ Features
 Syntax
 Themes
 Styling
-
-mindmap
-root((Project))
-Frontend
-React
-TypeScript
-Backend
-Node.js
-Database
-
 kanban
 Todo
 [Create Documentation]
@@ -544,7 +332,6 @@ id2[Title of diagram is more than 100 chars]@{ticket:MC-2036,priority:'Very High
 id3[Update DB function]@{ticket:MC-2037,assigned:knsv,priority:'High'}
 id12[Can't reproduce]
 id3[Weird flickering in Firefox]
-
 quadrantChart
 title Reach and engagement of campaigns
 x-axis Low Reach --> High Reach
@@ -559,3 +346,156 @@ Campaign C:[0.57,0.69]
 Campaign D:[0.78,0.34]
 Campaign E:[0.40,0.34]
 Campaign F:[0.35,0.78]
+sequenceDiagram
+A->>B: Sync
+A-xB: Async
+A--)B: Optional
+sequenceDiagram
+opt Optional
+A->>B: Message
+end
+sequenceDiagram
+critical Critical
+A->>B: Important
+end
+sequenceDiagram
+break Break
+A->>B: Exit
+end
+classDiagram
+class User{
++String username
++String email
++login()
+logout()
+}
+class Admin{
++String role
++manageUsers()
+}
+User <|-- Admin
+User "1" --> "*" Post: creates
+classDiagram
+class Shape{
++draw()
+}
+class Circle{
++radius:double
+}
+class Rectangle{
++width:double
++height:double
+}
+Shape <|-- Circle
+Shape <|-- Rectangle
+erDiagram
+USER {
+int id PK
+string username
+string email
+}
+POST {
+int id PK
+int userId FK
+string content
+}
+COMMENT {
+int id PK
+int postId FK
+string text
+}
+USER ||--o{ POST : writes
+POST ||--o{ COMMENT : has
+gantt
+dateFormat YYYY-MM-DD
+title Development Timeline
+section Planning
+Requirements:req,2024-01-01,5d
+Design:des,after req,3d
+section Development
+Backend:backend,2024-01-09,10d
+Frontend:frontend,2024-01-09,10d
+section Testing
+Unit Tests:test1,after backend,5d
+Integration:test2,after frontend,5d
+pie title Sales Distribution
+"Q1":25
+"Q2":30
+"Q3":25
+"Q4":20
+gitGraph
+commit id:"Init"
+commit id:"Add config"
+branch feature-login
+checkout feature-login
+commit id:"Login form"
+commit id:"Auth logic"
+checkout main
+merge feature-login
+commit id:"Release v1"
+journey
+title Shopping Experience
+section Browse
+Search:4:Customer
+View Products:5:Customer
+section Cart
+Add Item:5:Customer
+Review Cart:4:Customer
+section Checkout
+Payment:5:Customer
+Confirmation:5:Customer
+timeline
+title Product Development
+section Research
+Market Analysis:User Studies:Competitor Review
+section Design
+Wireframes:Prototypes:UI Design
+section Build
+Development:Testing:Deployment
+architecture-beta
+group mobile(mobile)[Mobile App]
+group web(browser)[Web App]
+service app(application)[App] in mobile
+service frontend(application)[Frontend] in web
+service backend(server)[Backend] in web
+service db(database)[Database] in web
+app:T--B:backend
+frontend:T--B:backend
+backend:L--R:db
+mindmap
+root((Learning))
+Languages
+JavaScript
+Python
+Frameworks
+React
+Vue
+Tools
+Git
+Docker
+kanban
+Backlog
+[New Feature Request]
+[Fix Bug]
+[Review PR]
+Doing
+[Implement Feature]
+[Write Tests]
+Review
+[Code Review]
+[QA Testing]
+Done
+[Deploy]
+[Documentation]
+quadrantChart
+title Product Analysis
+x-axis Low Value --> High Value
+y-axis Low Effort --> High Effort
+quadrant-1 Quick Wins
+quadrant-2 Major Projects
+quadrant-3 Fill-ins
+quadrant-4 Thankless Tasks
+Feature A:[0.7,0.3]
+Feature B:[0.9,0.8]
+Feature C:[0.3,0.2]
+Feature D:[0.4,0.9]

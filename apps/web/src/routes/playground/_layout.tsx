@@ -10,6 +10,7 @@ import {
   Fab,
   Tooltip,
   Button,
+  keyframes,
 } from "@mui/material";
 import { Copy, Check, Undo, Redo, FolderOpen } from "lucide-react";
 import { toast } from "sonner";
@@ -18,10 +19,34 @@ import { useAppStore } from "@/store/appStore";
 import { AIChat } from "@/components/ai-chat";
 import { ExampleDialog } from "@/components/example-dialog";
 import { CreateDiagramModal } from "@/components/create-diagram-modal";
+import { indigo } from "@mui/material/colors";
 
 const DRAWER_PERCENTAGE = 0.35; // 35% of viewport width (default)
 const MIN_DRAWER_WIDTH = 200;
 const MAX_DRAWER_PERCENTAGE = 0.6; // 60% of viewport width (max)
+
+// Gradient animation for shiny button effect
+const gradientAnimation = keyframes`
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+`;
+
+// Shimmer animation for shiny button effect
+const shimmerAnimation = keyframes`
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+`;
 
 export const Route = createFileRoute("/playground/_layout")({
   component: RouteComponent,
@@ -425,11 +450,11 @@ Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
                   position: "absolute",
                   bottom: '15px',
                   right: hasMermaidError ? 140 : 20,
-                  backgroundColor: "primary.main",
-                  color: "primary.contrastText",
+                  backgroundColor: indigo[400],
+                  color: "white",
                   transition: "right 0.2s ease",
                   "&:hover": {
-                    backgroundColor: "primary.dark",
+                    backgroundColor: indigo[500],
                   },
                 }}
               >

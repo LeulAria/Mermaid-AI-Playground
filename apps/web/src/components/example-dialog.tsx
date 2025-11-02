@@ -125,16 +125,16 @@ const examples: Example[] = [
     title: "User Journey",
     category: "Journey",
     mermaidCode: `journey
-    title User Journey
-    section Landing
-      Visit homepage: 5: User
-      Browse products: 4: User
-    section Purchase
-      Add to cart: 3: User
-      Checkout: 5: User
-      Payment: 4: User
-    section Completion
-      Receive confirmation: 5: User`,
+title User Journey
+section Landing
+Visit homepage:5:User
+Browse products:4:User
+section Purchase
+Add to cart:3:User
+Checkout:5:User
+Payment:4:User
+section Completion
+Receive confirmation:5:User`,
   },
   {
     id: "timeline-diagram",
