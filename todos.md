@@ -1,5 +1,10 @@
 [] Featured on homepage — inspires users.
 
+[] google and github login
+[] table to save diagrams
+[] share url button
+[] random generate digram inspirations button
+
 [] Keyboard Shortcuts Cheat Sheet
 Ctrl+Z, Ctrl+Enter = regenerate, Ctrl+S = export.
 
