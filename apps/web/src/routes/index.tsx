@@ -19,7 +19,7 @@ function HomeComponent() {
     <div
       className="min-h-screen relative bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: "url('/hero-img.png')",
+        backgroundImage: "url('/hero-img.jpg')",
       }}
     >
       {/* AppBar */}

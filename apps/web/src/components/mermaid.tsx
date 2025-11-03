@@ -180,6 +180,72 @@ export const Mermaid: React.FC<MermaidProps> = ({
         return;
       }
 
+      const ensureVisualCentering = (
+        svgElement: SVGSVGElement,
+        baseTransform: { x: number; y: number; scale: number }
+      ) => {
+        requestAnimationFrame(() => {
+          const containerRect =
+            containerRef.current?.getBoundingClientRect();
+          const svgRect = svgElement.getBoundingClientRect();
+          const instance = panzoomInstanceRef.current;
+          const instanceAny = instance as any;
+
+          if (!containerRect || !svgRect) {
+            previousTransformRef.current =
+              instance?.getTransform?.() ?? baseTransform;
+            return;
+          }
+
+          const containerCenterX =
+            containerRect.left + containerRect.width / 2;
+          const containerCenterY =
+            containerRect.top + containerRect.height / 2;
+          const svgCenterX = svgRect.left + svgRect.width / 2;
+          const svgCenterY = svgRect.top + svgRect.height / 2;
+
+          const offsetX = containerCenterX - svgCenterX;
+          const offsetY = containerCenterY - svgCenterY;
+
+          if (Math.abs(offsetX) <= 0.5 && Math.abs(offsetY) <= 0.5) {
+            previousTransformRef.current =
+              instance?.getTransform?.() ?? baseTransform;
+            return;
+          }
+
+          if (instance && typeof instanceAny?.moveBy === "function") {
+            instanceAny.moveBy(offsetX, offsetY, false);
+            previousTransformRef.current =
+              instance.getTransform?.() ?? {
+                x: baseTransform.x + offsetX,
+                y: baseTransform.y + offsetY,
+                scale: baseTransform.scale,
+              };
+          } else if (
+            instance &&
+            typeof instanceAny?.setTransform === "function"
+          ) {
+            const updatedTransform = {
+              x: baseTransform.x + offsetX,
+              y: baseTransform.y + offsetY,
+              scale: baseTransform.scale,
+            };
+            instanceAny.setTransform(updatedTransform);
+            previousTransformRef.current = updatedTransform;
+          } else {
+            const updatedX = baseTransform.x + offsetX;
+            const updatedY = baseTransform.y + offsetY;
+            svgElement.style.transformOrigin = "0 0";
+            svgElement.style.transform = `translate(${updatedX}px, ${updatedY}px) scale(${baseTransform.scale})`;
+            previousTransformRef.current = {
+              x: updatedX,
+              y: updatedY,
+              scale: baseTransform.scale,
+            };
+          }
+        });
+      };
+
       try {
         // Save current transform before clearing (if zoom has been initialized)
         if (panzoomInstanceRef.current && hasInitializedZoom.current) {
@@ -692,63 +758,14 @@ export const Mermaid: React.FC<MermaidProps> = ({
                 "svg"
               ) as SVGSVGElement;
 
-              if (svgElement && containerRef.current) {
-                try {
-                  const svgBBox = svgElement.getBBox();
-                  const containerRect =
-                    containerRef.current.getBoundingClientRect();
-
-                  if (
-                    containerRect &&
-                    containerRect.width > 0 &&
-                    containerRect.height > 0 &&
-                    svgBBox.width > 0 &&
-                    svgBBox.height > 0
-                  ) {
-                    // Calculate the scale to fit the diagram in the container with padding
-                    const padding = 8;
-                    const scaleX =
-                      (containerRect.width - padding * 2) / svgBBox.width;
-                    const scaleY =
-                      (containerRect.height - padding * 2) / svgBBox.height;
-                    let scale = Math.min(scaleX, scaleY);
-
-                    // Zoom in more aggressively for showcase (200% of fit scale)
-                    scale = scale * 2.0;
-
-                    // Ensure scale is reasonable
-                    if (!isFinite(scale) || scale <= 0) {
-                      scale = 1;
-                    }
-
-                    // Get the center of the SVG content bounding box (in SVG coordinates)
-                    const svgContentCenterX = svgBBox.x + svgBBox.width / 2;
-                    const svgContentCenterY = svgBBox.y + svgBBox.height / 2;
-
-                    // Get container center (in container/client coordinates)
-                    const containerCenterX = containerRect.width / 2;
-                    const containerCenterY = containerRect.height / 2;
-
-                    // Calculate the final transform to center the entire diagram content
-                    // Position the center of the scaled diagram at the center of the container
-                    const finalX = containerCenterX - svgContentCenterX * scale;
-                    const finalY = containerCenterY - svgContentCenterY * scale;
-
-                    // Ensure values are finite
-                    if (isFinite(finalX) && isFinite(finalY) && isFinite(scale)) {
-                      svgElement.style.transformOrigin = "0 0";
-                      svgElement.style.transform = `translate(${finalX}px, ${finalY}px) scale(${scale})`;
-                    }
-                  }
-                } catch (e) {
-                  // If centering fails, just ensure SVG is visible
-                  if (svgElement) {
-                    svgElement.style.visibility = "visible";
-                    svgElement.style.opacity = "1";
-                  }
-                }
+              if (svgElement) {
+                // Ensure the preview renders without any forced scaling/centering
+                svgElement.style.transform = "";
+                svgElement.style.transformOrigin = "";
+                svgElement.style.visibility = "visible";
+                svgElement.style.opacity = "1";
               }
-            }, 200);
+            }, 50);
           }
 
           // Initialize zoom/pan after a short delay to ensure SVG is rendered
@@ -788,53 +805,131 @@ export const Mermaid: React.FC<MermaidProps> = ({
                     if (!svgElement) return;
 
                     try {
-                      const svgBBox = svgElement.getBBox();
-                      const containerRect =
-                        containerRef.current.getBoundingClientRect();
+                        const svgBBox = svgElement.getBBox();
+                        const containerRect =
+                          containerRef.current.getBoundingClientRect();
 
-                      if (
-                        containerRect &&
-                        svgBBox.width > 0 &&
-                        svgBBox.height > 0
-                      ) {
-                        // Calculate the scale to fit the diagram in the container with some padding
-                        const padding = 60; // Padding around the diagram (increased for more breathing room)
-                        const scaleX =
-                          (containerRect.width - padding * 2) / svgBBox.width;
-                        const scaleY =
-                          (containerRect.height - padding * 2) / svgBBox.height;
-                        let scale = Math.min(scaleX, scaleY, 1); // Don't zoom in, only zoom out to fit
-                        
-                        // Zoom out a bit more for better visual appearance (85% of calculated scale)
-                        scale = scale * 0.85;
+                        if (containerRect) {
+                          const viewBox = svgElement.viewBox?.baseVal;
 
-                        // Get the center of the SVG content bounding box (in SVG coordinates)
-                        // This represents the center of the actual diagram content
-                        const svgContentCenterX = svgBBox.x + svgBBox.width / 2;
-                        const svgContentCenterY = svgBBox.y + svgBBox.height / 2;
+                          const contentWidth =
+                            svgBBox.width > 0
+                              ? svgBBox.width
+                              : viewBox?.width || 0;
+                          const contentHeight =
+                            svgBBox.height > 0
+                              ? svgBBox.height
+                              : viewBox?.height || 0;
+                          const contentX =
+                            svgBBox.width > 0
+                              ? svgBBox.x
+                              : viewBox?.x || 0;
+                          const contentY =
+                            svgBBox.height > 0
+                              ? svgBBox.y
+                              : viewBox?.y || 0;
 
-                        // Get container center (in container/client coordinates)
-                        const containerCenterX = containerRect.width / 2;
-                        const containerCenterY = containerRect.height / 2;
+                          if (contentWidth > 0 && contentHeight > 0) {
+                            const padding = 60;
+                            const usableWidth = Math.max(
+                              containerRect.width - padding * 2,
+                              1
+                            );
+                            const usableHeight = Math.max(
+                              containerRect.height - padding * 2,
+                              1
+                            );
 
-                        // Calculate the final transform to center the entire diagram content
-                        // We need to position the center of the scaled diagram at the center of the container
-                        // When we scale, the center point needs to be translated correctly
-                        // finalX/Y should move the scaled center point to the container center
-                        const finalX = containerCenterX - svgContentCenterX * scale;
-                        const finalY = containerCenterY - svgContentCenterY * scale;
+                            const scaleX = usableWidth / contentWidth;
+                            const scaleY = usableHeight / contentHeight;
+                            const targetScale = Math.min(scaleX, scaleY, 1);
 
-                        // Apply the transform using panzoom
-                        // Try setTransform first if available (most reliable)
-                        const setTransform = (panzoomInstanceRef.current as any)?.setTransform;
-                        if (setTransform && typeof setTransform === "function") {
-                          setTransform({ x: finalX, y: finalY, scale });
-                        } else {
-                          // Fallback: Apply transform manually to SVG and sync with panzoom
-                          svgElement.style.transformOrigin = "0 0";
-                          svgElement.style.transform = `translate(${finalX}px, ${finalY}px) scale(${scale})`;
+                            const appliedScale =
+                              isFinite(targetScale) && targetScale > 0
+                                ? targetScale
+                                : 1;
+
+                            const containerCenterX = containerRect.width / 2;
+                            const containerCenterY = containerRect.height / 2;
+
+                            const contentCenterX =
+                              contentX + contentWidth / 2;
+                            const contentCenterY =
+                              contentY + contentHeight / 2;
+
+                            const translateX =
+                              containerCenterX - contentCenterX * appliedScale;
+                            const translateY =
+                              containerCenterY - contentCenterY * appliedScale;
+
+                            const baseTransform = {
+                              x: translateX,
+                              y: translateY,
+                              scale: appliedScale,
+                            };
+
+                            const instance = panzoomInstanceRef.current;
+                            const instanceAny = instance as any;
+
+                            if (instance) {
+                              // Reset before applying transform to avoid compounding previous values
+                              if (typeof instanceAny?.reset === "function") {
+                                instanceAny.reset();
+                              } else {
+                                if (typeof instanceAny?.zoomAbs === "function") {
+                                  instanceAny.zoomAbs(0, 0, 1);
+                                } else if (
+                                  typeof instanceAny?.zoomTo === "function"
+                                ) {
+                                  instanceAny.zoomTo(0, 0, 1);
+                                }
+                                if (typeof instance?.moveTo === "function") {
+                                  instance.moveTo(0, 0);
+                                }
+                              }
+
+                              let transformApplied = false;
+
+                              if (
+                                typeof instanceAny?.zoomAbs === "function" &&
+                                typeof instance?.moveTo === "function"
+                              ) {
+                                instanceAny.zoomAbs(0, 0, appliedScale);
+                                instance.moveTo(translateX, translateY);
+                                transformApplied = true;
+                              } else if (
+                                typeof instanceAny?.zoomTo === "function" &&
+                                typeof instance?.moveTo === "function"
+                              ) {
+                                const currentTransform = instance.getTransform?.();
+                                const currentScale = currentTransform?.scale || 1;
+                                const zoomFactor =
+                                  currentScale > 0
+                                    ? appliedScale / currentScale
+                                    : appliedScale;
+                                instanceAny.zoomTo(0, 0, zoomFactor);
+                                instance.moveTo(translateX, translateY);
+                                transformApplied = true;
+                              }
+
+                              if (!transformApplied) {
+                                svgElement.style.transformOrigin = "0 0";
+                                svgElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${appliedScale})`;
+                              }
+                            } else {
+                              svgElement.style.transformOrigin = "0 0";
+                              svgElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${appliedScale})`;
+                            }
+
+                            const currentTransform =
+                              instance?.getTransform?.() || baseTransform;
+                            previousTransformRef.current = currentTransform;
+                            ensureVisualCentering(
+                              svgElement,
+                              currentTransform
+                            );
+                          }
                         }
-                      }
                     } catch (e) {
                       // Fallback to simple centering if getBBox fails
                       if (panzoomInstanceRef.current && containerRef.current) {

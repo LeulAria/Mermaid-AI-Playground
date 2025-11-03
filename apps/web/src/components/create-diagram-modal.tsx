@@ -63,7 +63,7 @@ export const CreateDiagramModal: React.FC<CreateDiagramModalProps> = ({
         >
           <Box
             component="img"
-            src="/image-bg.png"
+            src="/image-bg.jpg"
             alt="Background"
             sx={{
               width: "100%",
