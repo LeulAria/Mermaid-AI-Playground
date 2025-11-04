@@ -1,6 +1,6 @@
 <div align="center">
 
-![Mermaid AI Playground](https://github.com/LeulAria/Mermaid-AI-Playground/raw/main/apps/web/public/hero-img.png)
+![Mermaid AI Playground](https://github.com/LeulAria/Mermaid-AI-Playground/raw/main/apps/web/public/hero-img.jpg)
 
 # Mermaid AI Playground
 
