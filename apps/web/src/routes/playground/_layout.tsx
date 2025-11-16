@@ -88,7 +88,9 @@ function RouteComponent() {
   const lastEditorTextRef = useRef(editorText);
   const [showExamples, setShowExamples] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(true); // Open on initial load
-  const [initialAIMessage, setInitialAIMessage] = useState<string | undefined>(undefined);
+  const [initialAIMessage, setInitialAIMessage] = useState<string | undefined>(
+    undefined
+  );
   const hasMermaidError = useAppStore((state) => state.hasMermaidError);
   const mermaidErrorMessage = useAppStore((state) => state.mermaidErrorMessage);
 
@@ -176,19 +178,19 @@ function RouteComponent() {
 
   const handleEditorChange = (value: string | undefined) => {
     const newValue = value || "";
-    
+
     // If this change is from undo/redo, just sync the store without pushing to history
     if (isUndoRedoRef.current) {
       setEditorText(newValue);
       lastEditorTextRef.current = newValue;
       return;
     }
-    
+
     // If text hasn't actually changed, skip
     if (newValue === lastEditorTextRef.current) {
       return;
     }
-    
+
     // This is a user change - push to history
     pushToHistory(newValue);
     lastEditorTextRef.current = newValue;
@@ -228,7 +230,7 @@ function RouteComponent() {
 
   const handleFixBug = () => {
     if (!editorText.trim()) return;
-    
+
     // Create the fix bug message with the current editor content and error message
     const fixMessage = `I have a Mermaid diagram with an error. Please fix the syntax errors and return only the corrected, complete, and valid Mermaid code. Do not include any explanations or markdown formatting - only return the fixed Mermaid code.
 
@@ -240,7 +242,7 @@ ${editorText}
 ${mermaidErrorMessage ? `Error message: ${mermaidErrorMessage}` : ""}
 
 Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
-    
+
     // Set the initial message and open the AI chat
     setInitialAIMessage(fixMessage);
     setShowAIChat(true);
@@ -288,25 +290,30 @@ Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
             onClick={handleDrawerToggle}
             sx={{ mr: 2 }}
           >
-            <Box
-              component="svg"
-              width={24}
-              height={24}
-              viewBox="0 0 24 24"
+            <svg
+              width="20"
+              height="20"
               fill="none"
               stroke="currentColor"
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth="1"
+              strokeWidth="1.5"
+              viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M3 12h18" />
-              <path d="M3 6h18" />
-              <path d="M3 18h18" />
-            </Box>
+              <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+              <path d="M9 3v18"></path>
+            </svg>
           </IconButton>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexGrow: 1 }}>
-            <Typography variant="h6" sx={{ fontSize: "0.8rem", fontWeight: 600 }} noWrap component="div">
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 2, flexGrow: 1 }}
+          >
+            <Typography
+              variant="h6"
+              sx={{ fontSize: "0.8rem", fontWeight: 600 }}
+              noWrap
+              component="div"
+            >
               Mermaid Playground
             </Typography>
             <Tooltip title="Copy editor content" arrow>
@@ -323,7 +330,7 @@ Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
                 }}
               >
                 <span className="capitalize font-[500] text-[0.75rem]">
-                Copy Editor
+                  Copy Editor
                 </span>
               </Button>
             </Tooltip>
@@ -366,6 +373,35 @@ Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
                   }}
                 >
                   <Redo size={18} />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="Save Diagram" arrow>
+              <span>
+                <IconButton
+                  onClick={handleRedo}
+                  sx={{
+                    color: "text.primary",
+                    "&:disabled": {
+                      color: "text.disabled",
+                    },
+                  }}
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.7"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M5 21h14a2 2 0 0 0 2-2V8.828a2 2 0 0 0-.586-1.414l-3.828-3.828A2 2 0 0 0 15.172 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2Z"></path>
+                    <path d="M7 3v5h8V3"></path>
+                    <path d="M7 21v-6h10v6"></path>
+                  </svg>
                 </IconButton>
               </span>
             </Tooltip>
@@ -449,7 +485,7 @@ Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
                 onClick={() => setShowAIChat(true)}
                 sx={{
                   position: "absolute",
-                  bottom: '15px',
+                  bottom: "15px",
                   right: hasMermaidError ? 140 : 20,
                   backgroundColor: indigo[400],
                   color: "white",
@@ -493,7 +529,7 @@ Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
                     onClick={handleFixBug}
                     sx={{
                       position: "absolute",
-                      bottom: '15px',
+                      bottom: "15px",
                       right: 20,
                       backgroundColor: "#ff6b6b",
                       color: "#ffffff",
@@ -589,7 +625,7 @@ Please fix all syntax errors and return a complete, valid Mermaid diagram.`;
           <Outlet />
         </Box>
       </Box>
-      
+
       {/* Example Dialog */}
       <ExampleDialog
         open={showExamples}

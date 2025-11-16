@@ -1,10 +1,10 @@
 import { getUser } from "@/functions/get-user";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
 import { getPayment } from "@/functions/get-payment";
 import { orpc } from "@/utils/orpc";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/dashboard")({
 	component: RouteComponent,

@@ -14,6 +14,7 @@ import Header from "../components/header";
 import appCss from "../index.css?url";
 import type { QueryClient } from "@tanstack/react-query";
 import Loader from "@/components/loader";
+import { Analytics } from "@vercel/analytics/next"
 
 import type { orpc } from "@/utils/orpc";
 import AppProvider from "@/components/config/AppProvider";
@@ -56,6 +57,7 @@ function RootDocument() {
       </head>
       <AppProvider>
         <body>
+          <Analytics />
           <div className="grid h-svh grid-rows-[auto_1fr]">
             {isFetching ? <Loader /> : <Outlet />}
           </div>

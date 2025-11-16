@@ -7,6 +7,9 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import FeaturesCard from "@/components/features";
+import AuthModal from "@/components/auth-modal";
+import { useAppStore } from "@/store/appStore";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -14,6 +17,7 @@ export const Route = createFileRoute("/")({
 
 function HomeComponent() {
   const navigate = useNavigate();
+  const setAuthModalOpen = useAppStore((s) => s.setAuthModalOpen);
 
   return (
     <div
@@ -167,28 +171,28 @@ function HomeComponent() {
       </AppBar>
 
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/95" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/70 to-black/95" />
 
       {/* Hero Content - Centered */}
-      <div className="relative z-10 flex min-h-screen items-center justify-center">
+      <div className="relative z-10 mb-[5vh] flex mt-[10%] items-center justify-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center text-center">
             {/* Hero Content */}
             <div className="max-w-3xl space-y-6">
               {/* Main Heading */}
-              <h1 className="nfont tracking-tight text-xl sm:text-4xl lg:text-5xl mb-2 font-[700] text-white leading-tight tracking-tight">
-                Mermaid AI Diagrams
+              <h1 className="nfont max-w-xl text-center mx-auto tracking-tight text-xl sm:text-4xl lg:text-4xl mb-2 font-bold text-white leading-tight">
+                Design AI Powered Mermaid diagrams with plain text.
               </h1>
 
               {/* Description */}
-              <p className="nfont tracking-tight text-base sm:text-lg text-gray-200/90 max-w-xl mx-auto font-[400] leading-relaxed">
+              <p className="nfont tracking-tight text-base sm:text-md text-gray-200/90 max-w-lg mx-auto font-normal">
                 Transform your ideas into stunning flowcharts, sequence
                 diagrams, class diagrams, and more with our AI-powered Mermaid
                 diagram generator.
               </p>
 
               {/* CTA Button */}
-              <div className="pt-2">
+              <div className="pt-2 flex gap-4 justify-center">
                 <Button
                   variant="contained"
                   size="large"
@@ -200,10 +204,11 @@ function HomeComponent() {
                   className="nfont"
                   sx={{
                     borderRadius: "30px",
-                    paddingX: "40px",
-                    paddingY: "9px",
-                    fontSize: "0.9375rem",
-                    fontWeight: 500,
+                    paddingX: "30px",
+                    paddingY: "6px",
+                    height: "45px",
+                    fontSize: "0.8375rem",
+                    fontWeight: 600,
                     fontFamily:
                       '"Geist", "Inter", ui-sans-serif, system-ui, sans-serif',
                     textTransform: "none",
@@ -218,29 +223,70 @@ function HomeComponent() {
                     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                 >
-                  Get Started
+                  Launch Playground
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={() => {
+                    setAuthModalOpen(true);
+                  }}
+                  className="nfont"
+                  sx={{
+                    borderRadius: "30px",
+                    paddingX: "30px",
+                    paddingY: "6px",
+                    height: "45px",
+                    fontSize: "0.8375rem",
+                    fontWeight: 600,
+                    fontFamily:
+                      '"Geist", "Inter", ui-sans-serif, system-ui, sans-serif',
+                    textTransform: "none",
+                    border: "2px solid #FFF",
+                    color: "#FFF",
+                    boxShadow: "0 4px 14px rgba(0, 0, 0, 0.2)",
+                    "&:hover": {
+                      borderColor: "rgba(255, 255, 255, 0.6)",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.3)",
+                    },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  }}
+                >
+                  Login and Start
                 </Button>
               </div>
 
               {/* Feature Pills */}
               <div className="flex flex-wrap items-center justify-center gap-3 pt-8">
                 <div className="nfont rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-white/80 backdrop-blur-sm">
-                  Flowcharts
+                  Natural-language prompts
                 </div>
                 <div className="nfont rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-white/80 backdrop-blur-sm">
-                  Sequence Diagrams
+                  Live Mermaid preview
                 </div>
                 <div className="nfont rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-white/80 backdrop-blur-sm">
-                  Class Diagrams
+                  Pan & zoom controls
                 </div>
                 <div className="nfont rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-white/80 backdrop-blur-sm">
-                  And More
+                  Export-ready themes
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Features Card */}
+      <div
+        id="features"
+        className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 flex justify-center items-center"
+      >
+        <FeaturesCard />
+      </div>
+
+      {/* Auth Modal */}
+      <AuthModal />
     </div>
   );
 }

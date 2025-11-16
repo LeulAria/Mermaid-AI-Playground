@@ -35,6 +35,10 @@ export interface AppState {
   hasMermaidError: boolean;
   mermaidErrorMessage: string | null;
   setMermaidError: (hasError: boolean, errorMessage?: string) => void;
+
+  // Auth modal state
+  authModalOpen: boolean;
+  setAuthModalOpen: (open: boolean) => void;
 }
 
 const MAX_HISTORY_SIZE = 10;
@@ -64,6 +68,8 @@ const initialState: AppState = {
   hasMermaidError: false,
   mermaidErrorMessage: null,
   setMermaidError: (_hasError: boolean, _errorMessage?: string) => {},
+  authModalOpen: false,
+  setAuthModalOpen: (_open: boolean) => {},
 };
 
 const STORE_NAME = "mermaid-playground-store";
@@ -195,6 +201,13 @@ export const useAppStore = create(
             produce((state: AppState) => {
               state.hasMermaidError = hasError;
               state.mermaidErrorMessage = errorMessage || null;
+            }),
+          );
+        },
+        setAuthModalOpen: (open: boolean) => {
+          set(
+            produce((state: AppState) => {
+              state.authModalOpen = open;
             }),
           );
         },

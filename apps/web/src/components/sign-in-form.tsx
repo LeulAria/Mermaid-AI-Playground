@@ -1,4 +1,3 @@
-import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -7,6 +6,7 @@ import Loader from "./loader";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignInForm({
 	onSwitchToSignUp,
